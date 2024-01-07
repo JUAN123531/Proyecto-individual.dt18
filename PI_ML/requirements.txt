@@ -1,0 +1,10 @@
+fastapi
+fastparquet
+scikit-learn
+scipy
+textblob
+fastapi
+pandas
+uvicorn
+pip ==23.3.1
+
