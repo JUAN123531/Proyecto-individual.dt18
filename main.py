@@ -16,10 +16,10 @@ def PlayTimeGenre(year : str):
         Ejemplo de retorno: 
        {"Año de lanzamiento con más horas jugadas para Género X" : 2013}'''
     df = pd.read_parquet(r'./Data/endpoint1.parquet.gzip')
-    # Verifica si el genero ingresado existe en el DataFrame
+    # Verifica si el año ingresado existe en el DataFrame
     if year not in df.columns:
         return "Invalid year"
-     # Multiplica la columna del genero por la columna de playtime_forever
+     # Multiplicamos la columna del genero por la columna de playtime_forever
     genre_playtime = df[genre] * df['playtime_forever']
     
     # Calcula el total de horas jugadas en el genero
@@ -53,22 +53,10 @@ def PlayTimeGenre(year : str):
     genre_df = df[df[year] == 1]
 
     # Ordera el DataFrame por playtime_forever
-    sorted_genre_df = genre_df.sort_values(by='playtime_forever',
+    genre_df = genre_df.sort_values(by='playtime_forever',
                                            ascending=False)
-
-    # Extrae los primeros 5 usuarios
-    top_5 = sorted_genre_df.head(1)
-
-    # Crea un diccionario con los usuarios y sus datos
-    top_users_dict = {}
-    for _, row in top_5.iterrows():
-        top_users_dict[row['user_id']] = {
-            'user_url': row['user_url_x'],
-            'playtime_forever': row['playtime_forever']
-        }
-
     return {
-      "Usuario con más horas jugadas para Género X" : year
+      "Usuario con más horas jugadas para " : genre_df,'es' year
     }
 
 # 2
@@ -88,12 +76,6 @@ def UserForGenre(genre : str) :
     total_spent = user_data['price'].sum()
     
     total_items = user_data['items_count'].sum()
-
-    
-    # Calcula porcentaje de recomendaciones y total de reviews
-    total_recommended = user_data['reviews_recommend'].sum()
-    total_reviews = user_data.shape[0]
-    recommendation_percentage = (total_recommended / total_reviews) * 100
 
     return {
        
@@ -159,7 +141,13 @@ def sentiment_analysis(empresa_desarrolladora : str):
     Según la empresa desarrolladora, se devuelve un diccionario con el nombre de la desarrolladora como llave y una lista con la cantidad total de registros de reseñas de usuarios que se encuentren categorizados con un ]}análisis de sentimiento como valor.
 Ejemplo de retorno: {'Valve' : [Negative = 182, Neutral = 120, Positive = 278 """
      df = pd.read_parquet(r'./Data/endpoint5.parquet.gzip')
+     fil = df[df.reviews_item_id == reviews_item_id]
+    return {
     
+        'Negativo'= fil.negativo.to_list()[0],
+        'Neutral'=fil.neutral.to_list()[0]
+        'Positivo'= fil.positivo.to_list()[0],
+    }
   
 # ML
 @app.get('/recomendacion_juego/{id_del_producto}')
