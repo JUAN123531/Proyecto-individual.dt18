@@ -4,7 +4,7 @@ from recommendation import cosine_sim
 
 
 
-app = FastAPI()
+app = fastAPI()
 
 
 # 1
