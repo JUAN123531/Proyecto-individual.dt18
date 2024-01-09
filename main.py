@@ -1,10 +1,10 @@
-from fastAPI import FastAPI
+from FastAPI import FastAPI
 import pandas as pd
 from recommendation import cosine_sim
 
 
 
-app = fastAPI()
+app = FastAPI()
 
 
 # 1
